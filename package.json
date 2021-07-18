@@ -1,0 +1,22 @@
+{
+  "name": "youtube-caption",
+  "version": "1.0.0",
+  "description": "Get captions (subtitles) of YouTube video (may contain ads)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ."
+  },
+  "keywords": [
+    "yt",
+    "youtube",
+    "sub",
+    "title",
+    "subtitle"
+  ],
+  "author": "darcy",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^10.1.0"
+  }
+}
