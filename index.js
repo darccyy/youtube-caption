@@ -1,8 +1,8 @@
-const F = require("fnct");
 const fs = require("fs");
 const path = require("path");
 const fetch = require("node-fetch");
 const puppeteer = require("puppeteer");
+const say = require("say");
 
 var headless = true;
 // headless = false; // Uncomment to see browser
@@ -24,11 +24,11 @@ var headless = true;
   }
   console.log("Fetching captions for ID:", vidId);
 
-  browser = await puppeteer.launch({headless, defaultViewport: null, args: ['--start-maximized']});
+  browser = await puppeteer.launch({headless, defaultViewport: null, args: ["--start-maximized"]});
   [page] = await browser.pages();
-  await page.goto("https://www.youtube.com/watch?v={0}".format(vidId));
+  await page.goto(`https://www.youtube.com/watch?v=${vidId}`);
 
-  await page.tracing.start({categories: ['devtools.timeline'], path: "./tracing.json"});
+  await page.tracing.start({categories: ["devtools.timeline"], path: "./tracing.json"});
 
   try {
     element = await page.click("#movie_player > div.ytp-chrome-bottom > div.ytp-chrome-controls > div.ytp-right-controls > button.ytp-subtitles-button.ytp-button");
@@ -85,12 +85,21 @@ var headless = true;
     }
     output = output.join("");
     while (output.includes("\n\n")) {
-      output = output.replaceAll("\n\n", "\n");
+      output = output.split("\n\n").join("\n");
     }
 
     fs.writeFileSync(path.join(__dirname, "output.txt"), output);
     console.log("-".repeat(20));
     console.log(output);
+    console.log("Captions written to output.txt");
+
+    say.export(output.split("\n").join(", "), null, 1, "output.mp3", (err) => {
+      if (err) {
+        return console.error(err);
+      }
+
+      console.log("Text to Speech written to output.mp3");
+    })
   }
 
   await browser.close();
