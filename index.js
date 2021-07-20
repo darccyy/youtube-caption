@@ -9,17 +9,18 @@ var headless = true;
 
 (async () => {
   var vidId;
-  try {
-    vidId = fs.readFileSync(path.join(__dirname, "id.txt")).toString();
-    if (!vidId) {
-      throw "id_undefined";
-    }
-  } catch {
+  if (process.argv[2]) {
     vidId = process.argv[2];
-  }
-  if (!vidId) {
-    console.error("No video ID");
-    process.exit();
+  } else {
+    try {
+      vidId = fs.readFileSync(path.join(__dirname, "id.txt")).toString();
+      if (!vidId) {
+        throw "id_undefined";
+      }
+    } catch {
+      console.error("No video ID");
+      process.exit();
+    }
   }
   console.log("Fetching captions for ID:", vidId);
 
@@ -82,10 +83,14 @@ var headless = true;
         }
       }
     }
+    output = output.join("");
+    while (output.includes("\n\n")) {
+      output = output.replaceAll("\n\n", "\n");
+    }
 
-    fs.writeFileSync(path.join(__dirname, "output.txt"), output.join(""));
+    fs.writeFileSync(path.join(__dirname, "output.txt"), output);
     console.log("-".repeat(20));
-    console.log(output.join(""));
+    console.log(output);
   }
 
   await browser.close();
