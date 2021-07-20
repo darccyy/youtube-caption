@@ -9,7 +9,7 @@ var headless = true;
 
 (async () => {
   var vidId;
-  if (process.argv[2]) {
+  if (process.argv[2] && process.argv[2].length > 2) {
     vidId = process.argv[2];
   } else {
     try {
@@ -93,13 +93,13 @@ var headless = true;
     console.log(output);
     console.log("Captions written to output.txt");
 
-    say.export(output.split("\n").join(", "), null, 1, "output.mp3", (err) => {
+    say.export(output.split("\n").join(" "), null, parseInt(process.argv[3]) || 1, "output.mp3", (err) => {
       if (err) {
         return console.error(err);
       }
 
       console.log("Text to Speech written to output.mp3");
-    })
+    });
   }
 
   await browser.close();
