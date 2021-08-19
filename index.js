@@ -10,7 +10,7 @@ const rl = require("readline").createInterface({
 });
 
 var headless = true;
-headless = false; // Uncomment to see browser
+// headless = false; // Uncomment to see browser
 
 async function main() {
   /* Get / Format video ID */
@@ -46,7 +46,7 @@ async function main() {
       await sleep(1);
     }
   }
-  
+  w
   /* Pause video to stop unnecessary network usage */
   await page.evaluate(el => {
     document.querySelector("video").currentTime = document.querySelector("video").duration;
